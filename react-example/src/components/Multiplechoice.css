@@ -1,0 +1,7 @@
+ul.questions {
+    list-style-type: none; 
+    display: inline;
+  }
+  ul.questions p { 
+      display: inline; 
+}

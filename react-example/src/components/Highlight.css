@@ -1,0 +1,18 @@
+
+
+#text,
+#canvas {
+    position: absolute;
+    top: 20;
+    left: 0;
+    opacity : 0.5;
+    width: 100%;
+    height: 100%;
+}
+#text {
+    z-index: -1;
+    opacity : 1;
+    padding-left: 10%;
+    padding-right: 10%;
+    width: 80%;
+}
