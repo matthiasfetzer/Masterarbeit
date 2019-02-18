@@ -1,93 +1,176 @@
 import React from 'react'
-import './Performancetest.css';
+import './Performancetest.css'
+import Canvas from './Canvas'
+import { reject } from 'q';
 
 class Performancetest extends React.Component {
   
     constructor(props) {
         super(props);
-        this.state = {operations: '', rows: ['Values'] };
+        this.state = {operations: '', rows: [], canvas: '', worker: true };
       }
 
-    setOperations(event) {
-        console.log(event.target.value)
-        const ops = event.target.value
-        this.setState({operations : ops})
-    }
-
-    insert() {
-        var rows = this.state.rows
-        var operations = this.state.operations
-        
-        var temp = 0
-        for (let i=0;i < parseInt(operations, 10);i++){
-            // TODO change back
-            //rows.push(Math.floor(1000 + Math.random() * 9000))
-            rows.push(temp++)
-            this.setState({rows: rows})
+    componentDidUpdate  = () => {
+        if (this.state.worker === true) {
+            var counter = 10000
+            new Promise((resolve, reject) => {
+                while(counter >= 0){
+                    console.log("Promise is working !!!!" +counter)
+                    counter--
+                }
+            })
         }
     }
-
-    clear() {
-        var rows = ['Values']
-        this.setState({rows: rows})
+    
+    insertCanvas = () => {
+       var numberOfCanvas = this.state.operations 
+       this.setState({canvas: numberOfCanvas})
     }
 
-    swap () {
-        // first row is header
-        var rows = this.state.rows.length-1
-        var operations = parseInt(this.state.operations)+1
-        var inital = operations
-        var first = 1
- 
-        while (operations <= rows) {
-            console.log("first:" + first)
-            console.log("second:" + operations)
-            if(operations >= rows){
-                return;
-            }
-            // Todo
-            rows[first] = rows[operations]
-            first=operations+inital
-            operations=first+inital
-        }
+    setOperations =(event)=> {
+    const ops = event.target.value
+    this.setState({operations : ops})
+    }
+
+    insertNumbers =()=> {
+    var tempRows = this.state.rows
+    var operations = this.state.operations
+
+    var temp = 0 //-> for debugging only
+    for (let i=0;i < parseInt(operations, 10);i++){
+        //tempRows.push(Math.floor(1000 + Math.random() * 9000));
+        tempRows.push(temp++) //-> for debugging only
+    }
+    this.setState({rows: tempRows})
+    }
+
+    clear=()=> {
+    var empty = []
+    this.setState({rows: empty, canvas: ''})
+    }
+
+    swap =()=> {
+    var operations = parseInt(this.state.operations)+1
+    var firstValue = 1
+    var tempRows = this.state.rows
+    var rowsLength = this.state.rows.length
+    var inital = operations
+
+    while (operations < rowsLength) {
+        let  tempFirst = tempRows[firstValue];  // save fist entry to swap
+        tempRows.splice(firstValue, 1, tempRows[operations]);
+        tempRows.splice(operations, 1, tempFirst);
+        //  console.log("swap index: "+first +"<- " + operations)
+        //  console.log("swap index: "+operations +"<- " + first)
+        firstValue=operations+1 // first as next entry
+        operations=firstValue-1+inital // second as last first (first -1) + operation value
+    }
+    this.setState({rows: tempRows});
+    }
+
+    append =()=> {
+    var operations = parseInt(this.state.operations)+1
+    var inital = operations-1
+    var rowsLength = this.state.rows.length
+    var tempRows = this.state.rows
+    tempRows[1] = tempRows[1] + ",00"
+
+    while (operations < rowsLength) {
+        console.log("operations: "+operations + "rows Lenght: " +rowsLength)
+        tempRows[operations] = tempRows[operations] + ",00";
+        operations = operations + inital
+    }
+    this.setState({rows: tempRows});
+    }
+
+    delete =()=> {
+    var operations = parseInt(this.state.operations)
+    var initalOperator = operations
+    var tempOps = operations
+    var tempRows = this.state.rows
+    // always delete first row and reduce index by 1 (lenght -1)
+    tempRows.splice(1, 1);
+
+    while (tempOps <= this.state.rows.length) {
+        // console.log("operations: " +tempOps + "value: " +tempRows[tempOps])
+        tempRows.splice(tempOps--, 1);
+        tempOps = tempOps + initalOperator
+    }
+    this.setState({rows: tempRows});
     }
 
 
+    startCalculation = async () => {
+         this.setState({worker: true})
+    }
+
+   stopCalculation =()=> {
+        console.log("In stop calc")
+        this.setState({worker: false})
+        console.log("Promise Worker stopped !!")
+   }
 
     render() {
+        const canvasElements = [];
+
+            for (var i = 0; i < this.state.canvas; i += 1) {
+                canvasElements.push(<Canvas key={i} number={i} height="80px" width="80px"/>);
+            };
+
+          
 
         return (
             <div id="container">
-
                 <h3>Welcome Performancetest</h3>
         
-                <button type="button" onClick={this.clear.bind(this)}>Clear</button> 
-                <button type="button" onClick={this.insert.bind(this)}>Insert</button> 
-                <button type="button" onClick={this.swap.bind(this)}>Swap</button> 
-                <button type="button">Append</button> 
-                <button type="button">Delete</button> 
-                <button type="button">Insert Canvas</button> 
-                <button type="button">Starte Berechnung</button> 
-                <button type="button">Stoppe Berechnung</button> 
+                <button type="button" onClick = {this.clear}>Clear</button> 
+                <button type="button" onClick={this.insertNumbers}>Insert</button> 
+                <button type="button" onClick={this.swap}>Swap</button> 
+                <button type="button" onClick={this.append}>Append</button> 
+                <button type="button" onClick={this.delete}>Delete</button> 
+                <button type="button" onClick={this.insertCanvas}>Insert Canvas</button> 
+                <button type="button" onClick={this.startCalculation}>Starte Berechnung</button> 
+                <button type="button" onClick={this.stopCalculation}>Stoppe Berechnung</button> 
                 <br/> <br/>
 
-                
-
-                <input type="text" name="operations"  onChange={this.setOperations.bind(this)}/>
+                <input type="text" name="operations"  onChange={this.setOperations}/>
 
                 <p id="ops">Current Operations: {this.state.operations}</p>
                 <br/> <br/>
                 
+                <script type="text/babel">
+                    var worker = new Worker('Worker.js')
+                    worker.
+ 
+                </script>
+
                 <table>
                  <tbody>
+                     <tr>
+                        <th>Values</th>
+                     </tr>
                     {this.state.rows.map((r, i) => (
                       <tr key={i}>
                           <td key={i}>{r}</td>
                       </tr>
                     ))}
-                   </tbody>
+                      
+                    </tbody>
                 </table>
 
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Canvas</th>
+                        </tr>
+
+                        {canvasElements.map((r, i) => (
+                      <tr id= "canvasId" key={i}>
+                          <th>{r}</th> 
+                      </tr>
+                    ))}
+                    </tbody>
+                </table>
             </div>
         );
     }
