@@ -1,0 +1,9 @@
+{
+    "frage1" : {
+
+        "frage": "Was ist die offizielle Weltsprache?",
+        "antworten": ["A: Englisch", "B: Spanisch", "C: Chinesisch"],
+        "korrekt" : "A:"
+    }
+    
+}
