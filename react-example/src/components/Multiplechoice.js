@@ -29,18 +29,17 @@ class Multiplechoice extends React.Component {
         console.log("eventtargetvalue: " + event.target.value)
         if(event.target.value.startsWith(this.state.korrekt)){
             console.log("Answer is korrect!!")
-            let id = window.document.getElementById(event.target.value).innerText="      ->YES"
+            window.document.getElementById(event.target.value).innerText="      ->YES"
             
         } else {
             console.log("Answer is false!!")
-            let id = window.document.getElementById(event.target.value).innerText="      ->NO"
+            window.document.getElementById(event.target.value).innerText="      ->NO"
         }
     }
 
     render() {
         const question = this.state.frage
         const antworten = this.state.antworten
-        const korrekt = this.state.korrekt
  
         return (
             <div id="container">

@@ -1,26 +1,13 @@
 import React from 'react'
 import './Performancetest.css'
 import Canvas from './Canvas'
-import { reject } from 'q';
 
 class Performancetest extends React.Component {
   
     constructor(props) {
         super(props);
-        this.state = {operations: '', rows: [], canvas: '', worker: true };
+        this.state = {operations: '', rows: [], canvas: '', startCalc: null };
       }
-
-    componentDidUpdate  = () => {
-        if (this.state.worker === true) {
-            var counter = 10000
-            new Promise((resolve, reject) => {
-                while(counter >= 0){
-                    console.log("Promise is working !!!!" +counter)
-                    counter--
-                }
-            })
-        }
-    }
     
     insertCanvas = () => {
        var numberOfCanvas = this.state.operations 
@@ -99,15 +86,23 @@ class Performancetest extends React.Component {
     this.setState({rows: tempRows});
     }
 
-
-    startCalculation = async () => {
-         this.setState({worker: true})
+    startCalculation =  () => {
+        var tempCals = setInterval(function(){
+            let num = 50
+            var a = 1, b = 0, temp;
+            while (num >= 0){
+              temp = a;
+              a = a + b;
+              b = temp;
+              console.log(b)
+              num--;
+            }
+        },1000)
+        this.setState({startCalc: tempCals})
     }
 
-   stopCalculation =()=> {
-        console.log("In stop calc")
-        this.setState({worker: false})
-        console.log("Promise Worker stopped !!")
+   stopCalculation = async ()=> {
+        clearInterval(this.state.startCalc);
    }
 
     render() {
@@ -137,12 +132,6 @@ class Performancetest extends React.Component {
 
                 <p id="ops">Current Operations: {this.state.operations}</p>
                 <br/> <br/>
-                
-                <script type="text/babel">
-                    var worker = new Worker('Worker.js')
-                    worker.
- 
-                </script>
 
                 <table>
                  <tbody>
