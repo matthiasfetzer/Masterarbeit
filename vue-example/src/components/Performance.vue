@@ -4,15 +4,14 @@
                 <div id="ops">
                     
                     <button type="button" v-on:click="insertNumbers">Insert</button> 
-                    <button type="button"  v-on:click="clear">Clear</button> 
+                    <button type="button" v-on:click="clear">Clear</button> 
                     <button type="button" v-on:click="swap">Swap</button> 
                     <button type="button" v-on:click="append">Append</button> 
                     <button type="button" v-on:click="remove">Delete</button> 
                     <button type="button" v-on:click="insertCanvas">Insert Canvas</button> 
-                <!--
                     <button type="button" v-on:click="startCalculation">Starte Berechnung</button> 
-                    <button type="button" v-on:click="parallel">Stoppe Berechnung</button> 
-                -->
+                    <button type="button" v-on:click="stopCalculation">Stoppe Berechnung</button> 
+  
                     <br><br>
                     <input v-model="operations" type="Number" value="ops" />
                     {{ operations }}
@@ -40,10 +39,16 @@
                     </table>
                 </div>
           </div>
+
 </template>
 
+
 <script>
+
 import Canvas from './Canvas.vue'
+
+var startCalc = null;
+
 export default {
     name : 'performanceTest',
      data () { 
@@ -115,7 +120,25 @@ export default {
 
         insertCanvas () {
          this.cans = parseInt(this.operations)
-        }   
+        },
+
+        startCalculation () {
+            this.startCalc = setInterval(function(){
+                let num = 50
+                var a = 1, b = 0, temp;
+                    while (num >= 0){
+                        temp = a;
+                        a = a + b;
+                        b = temp;
+                        console.log(b)
+                        num--;
+                    }
+            },1000)
+        },
+
+        stopCalculation () {
+            clearInterval(this.startCalc);
+        }
 
     }, components : {
             Canvas
