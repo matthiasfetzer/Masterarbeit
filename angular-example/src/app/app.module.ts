@@ -9,6 +9,8 @@ import { MultiplechoiceComponent } from './components/multiplechoice/multiplecho
 import { PerformanceComponent } from './components/performance/performance.component';
 import { AppConstantsModule } from './app-constants.module';
 import { CanvasComponent } from './components/highlight/canvas.component';
+import { FormsModule } from '@angular/forms';
+import { Performance_canvasComponent } from './components/performance/performance_canvas.component'
 
 @NgModule({
   declarations: [
@@ -17,13 +19,15 @@ import { CanvasComponent } from './components/highlight/canvas.component';
     HighlightComponent,
     MultiplechoiceComponent,
     PerformanceComponent,
-    CanvasComponent
+    CanvasComponent,
+    Performance_canvasComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     AppConstantsModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
