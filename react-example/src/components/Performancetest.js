@@ -6,50 +6,66 @@ class Performancetest extends React.Component {
   
     constructor(props) {
         super(props);
-        this.state = {operations: '', rows: [], canvas: '', startCalc: null, startCalcOnClick: false };
+        this.state = {operations: '', rows: [], canvas: '', startCalc: null, startCalcOnClick: false, startTime: 0};
       }
     
+    componentDidUpdate () {
+        // For performance test -> after rendering has finished
+        let endTime = performance.now()
+        var executionTime = endTime - this.state.startTime
+ 
+        if(this.state.startTime !== 0) {
+            console.log(executionTime)
+        }
+    }
+
+
     insertCanvas = () => {
         if (this.state.startCalcOnClick){
             this.startCalculation()
         }
+        let startTime = performance.now()
+        this.setState({startTime: startTime})
+
         var numberOfCanvas = this.state.operations 
         this.setState({canvas: numberOfCanvas})
     }
 
     setOperations =(event)=> {
     const ops = event.target.value
-    this.setState({operations : ops})
+    this.setState({operations : ops, startTime: 0})
     }
 
     insertNumbers =()=> {
         if (this.state.startCalcOnClick){
             this.startCalculation()
         }
-        
+        let startTime = performance.now()
+        this.setState({startTime: startTime})
+
         var tempRows = this.state.rows
         var operations = this.state.operations
 
-        var temp = 0 //-> for debugging only
+        // var temp = 0 //-> for debugging only
         for (let i=0;i < parseInt(operations, 10);i++){
-            //tempRows.push(Math.floor(1000 + Math.random() * 9000));
-            tempRows.push(temp++) //-> for debugging only
+            tempRows.push(Math.floor(1000 + Math.random() * 9000));
+            //tempRows.push(temp++) //-> for debugging only
         }
         this.setState({rows: tempRows})
     }
 
     clear=()=> {
-        if (this.state.startCalcOnClick){
-            this.startCalculation()
-        }
         var empty = []
-        this.setState({rows: empty, canvas: ''})
+        this.setState({rows: empty, canvas: '', startTime: 0})
     }
 
     swap =()=> {
         if (this.state.startCalcOnClick){
             this.startCalculation()
         }
+        let startTime = performance.now()
+        this.setState({startTime: startTime})
+
         var operations = parseInt(this.state.operations)+1
         var firstValue = 1
         var tempRows = this.state.rows
@@ -72,6 +88,9 @@ class Performancetest extends React.Component {
         if (this.state.startCalcOnClick){
             this.startCalculation()
         }
+        let startTime = performance.now()
+        this.setState({startTime: startTime})
+
         var operations = parseInt(this.state.operations)+1
         var inital = operations-1
         var rowsLength = this.state.rows.length
@@ -79,7 +98,7 @@ class Performancetest extends React.Component {
         tempRows[1] = tempRows[1] + ",00"
 
         while (operations < rowsLength) {
-            console.log("operations: "+operations + "rows Lenght: " +rowsLength)
+            //console.log("operations: "+operations + "rows Lenght: " +rowsLength)
             tempRows[operations] = tempRows[operations] + ",00";
             operations = operations + inital
         }
@@ -90,6 +109,9 @@ class Performancetest extends React.Component {
         if (this.state.startCalcOnClick){
             this.startCalculation()
         }
+        let startTime = performance.now()
+        this.setState({startTime: startTime})
+
         var operations = parseInt(this.state.operations)
         var initalOperator = operations
         var tempOps = operations
@@ -106,6 +128,7 @@ class Performancetest extends React.Component {
     }
 
     startCalculation =  () => {
+        console.log("Start Background calculations")
         var tempCals = setInterval(function(){
             let num = 50
             var a = 1, b = 0, temp;
@@ -113,7 +136,7 @@ class Performancetest extends React.Component {
               temp = a;
               a = a + b;
               b = temp;
-              console.log(b)
+              //console.log(b)
               num--;
             }
         },1000)
@@ -121,6 +144,7 @@ class Performancetest extends React.Component {
     }
 
    stopCalculation = ()=> {
+        console.log("Stop Background calculations")
         clearInterval(this.state.startCalc);
    }
 
