@@ -6,12 +6,15 @@ class Performancetest extends React.Component {
   
     constructor(props) {
         super(props);
-        this.state = {operations: '', rows: [], canvas: '', startCalc: null };
+        this.state = {operations: '', rows: [], canvas: '', startCalc: null, startCalcOnClick: false };
       }
     
     insertCanvas = () => {
-       var numberOfCanvas = this.state.operations 
-       this.setState({canvas: numberOfCanvas})
+        if (this.state.startCalcOnClick){
+            this.startCalculation()
+        }
+        var numberOfCanvas = this.state.operations 
+        this.setState({canvas: numberOfCanvas})
     }
 
     setOperations =(event)=> {
@@ -20,70 +23,86 @@ class Performancetest extends React.Component {
     }
 
     insertNumbers =()=> {
-    var tempRows = this.state.rows
-    var operations = this.state.operations
+        if (this.state.startCalcOnClick){
+            this.startCalculation()
+        }
+        
+        var tempRows = this.state.rows
+        var operations = this.state.operations
 
-    var temp = 0 //-> for debugging only
-    for (let i=0;i < parseInt(operations, 10);i++){
-        //tempRows.push(Math.floor(1000 + Math.random() * 9000));
-        tempRows.push(temp++) //-> for debugging only
-    }
-    this.setState({rows: tempRows})
+        var temp = 0 //-> for debugging only
+        for (let i=0;i < parseInt(operations, 10);i++){
+            //tempRows.push(Math.floor(1000 + Math.random() * 9000));
+            tempRows.push(temp++) //-> for debugging only
+        }
+        this.setState({rows: tempRows})
     }
 
     clear=()=> {
-    var empty = []
-    this.setState({rows: empty, canvas: ''})
+        if (this.state.startCalcOnClick){
+            this.startCalculation()
+        }
+        var empty = []
+        this.setState({rows: empty, canvas: ''})
     }
 
     swap =()=> {
-    var operations = parseInt(this.state.operations)+1
-    var firstValue = 1
-    var tempRows = this.state.rows
-    var rowsLength = this.state.rows.length
-    var inital = operations
+        if (this.state.startCalcOnClick){
+            this.startCalculation()
+        }
+        var operations = parseInt(this.state.operations)+1
+        var firstValue = 1
+        var tempRows = this.state.rows
+        var rowsLength = this.state.rows.length
+        var inital = operations
 
-    while (operations < rowsLength) {
-        let  tempFirst = tempRows[firstValue];  // save fist entry to swap
-        tempRows.splice(firstValue, 1, tempRows[operations]);
-        tempRows.splice(operations, 1, tempFirst);
-        //  console.log("swap index: "+first +"<- " + operations)
-        //  console.log("swap index: "+operations +"<- " + first)
-        firstValue=operations+1 // first as next entry
-        operations=firstValue-1+inital // second as last first (first -1) + operation value
-    }
-    this.setState({rows: tempRows});
+        while (operations < rowsLength) {
+            let  tempFirst = tempRows[firstValue];  // save fist entry to swap
+            tempRows.splice(firstValue, 1, tempRows[operations]);
+            tempRows.splice(operations, 1, tempFirst);
+            //  console.log("swap index: "+first +"<- " + operations)
+            //  console.log("swap index: "+operations +"<- " + first)
+            firstValue=operations+1 // first as next entry
+            operations=firstValue-1+inital // second as last first (first -1) + operation value
+        }
+        this.setState({rows: tempRows});
     }
 
     append =()=> {
-    var operations = parseInt(this.state.operations)+1
-    var inital = operations-1
-    var rowsLength = this.state.rows.length
-    var tempRows = this.state.rows
-    tempRows[1] = tempRows[1] + ",00"
+        if (this.state.startCalcOnClick){
+            this.startCalculation()
+        }
+        var operations = parseInt(this.state.operations)+1
+        var inital = operations-1
+        var rowsLength = this.state.rows.length
+        var tempRows = this.state.rows
+        tempRows[1] = tempRows[1] + ",00"
 
-    while (operations < rowsLength) {
-        console.log("operations: "+operations + "rows Lenght: " +rowsLength)
-        tempRows[operations] = tempRows[operations] + ",00";
-        operations = operations + inital
-    }
-    this.setState({rows: tempRows});
+        while (operations < rowsLength) {
+            console.log("operations: "+operations + "rows Lenght: " +rowsLength)
+            tempRows[operations] = tempRows[operations] + ",00";
+            operations = operations + inital
+        }
+        this.setState({rows: tempRows});
     }
 
     delete =()=> {
-    var operations = parseInt(this.state.operations)
-    var initalOperator = operations
-    var tempOps = operations
-    var tempRows = this.state.rows
-    // always delete first row and reduce index by 1 (lenght -1)
-    tempRows.splice(1, 1);
+        if (this.state.startCalcOnClick){
+            this.startCalculation()
+        }
+        var operations = parseInt(this.state.operations)
+        var initalOperator = operations
+        var tempOps = operations
+        var tempRows = this.state.rows
+        // always delete first row and reduce index by 1 (lenght -1)
+        tempRows.splice(1, 1);
 
-    while (tempOps <= this.state.rows.length) {
-        // console.log("operations: " +tempOps + "value: " +tempRows[tempOps])
-        tempRows.splice(tempOps--, 1);
-        tempOps = tempOps + initalOperator
-    }
-    this.setState({rows: tempRows});
+        while (tempOps <= this.state.rows.length) {
+            // console.log("operations: " +tempOps + "value: " +tempRows[tempOps])
+            tempRows.splice(tempOps--, 1);
+            tempOps = tempOps + initalOperator
+        }
+        this.setState({rows: tempRows});
     }
 
     startCalculation =  () => {
@@ -101,8 +120,12 @@ class Performancetest extends React.Component {
         this.setState({startCalc: tempCals})
     }
 
-   stopCalculation = async ()=> {
+   stopCalculation = ()=> {
         clearInterval(this.state.startCalc);
+   }
+
+   startCalcOnClick = (event) => {
+    this.setState({startCalcOnClick: event.target.checked});
    }
 
     render() {
@@ -125,7 +148,8 @@ class Performancetest extends React.Component {
                 <button type="button" onClick={this.delete}>Delete</button> 
                 <button type="button" onClick={this.insertCanvas}>Insert Canvas</button> 
                 <button type="button" onClick={this.startCalculation}>Starte Berechnung</button> 
-                <button type="button" onClick={this.stopCalculation}>Stoppe Berechnung</button> 
+                <button type="button" onClick={this.stopCalculation}>Stoppe Berechnung</button> <br/> <br/>
+                <input type="checkbox" checked={this.state.startCalcOnClick} onChange={this.startCalcOnClick} /> Starte Kalkulation mit Button Click 
                 <br/> <br/>
 
                 <input type="text" name="operations"  onChange={this.setOperations}/>
