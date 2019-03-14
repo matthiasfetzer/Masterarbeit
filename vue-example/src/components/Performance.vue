@@ -11,7 +11,8 @@
                     <button type="button" v-on:click="insertCanvas">Insert Canvas</button> 
                     <button type="button" v-on:click="startCalculation">Starte Berechnung</button> 
                     <button type="button" v-on:click="stopCalculation">Stoppe Berechnung</button> 
-  
+                    <br><br>
+                    <input type="checkbox" v-model="startCalcOnClick" /> Starte Kalkulation mit Button Click
                     <br><br>
                     <input v-model="operations" type="Number" value="ops" />
                     {{ operations }}
@@ -47,22 +48,27 @@
 
 import Canvas from './Canvas.vue'
 
-var startCalc = null;
-
 export default {
     name : 'performanceTest',
      data () { 
         return { 
             operations : 0,
             rows : [],
-            cans: 0
+            cans: 0,
+            startCalcOnClick: false,
+            startCalc: null,
+            startTime : 0
         }
     },
     methods : {
        
         insertNumbers () {
-
-           // var temp = 0 //-> for debugging only
+            if (this.startCalcOnClick){
+                this.startCalculation()
+            }
+            this.startTime = performance.now()
+ 
+        // var temp = 0 //-> for debugging only
             for (let i=0;i < parseInt(this.operations, 10);i++){
                 this.rows.push(Math.floor(1000 + Math.random() * 9000));
                 //this.rows.push(temp++) //-> for debugging only
@@ -72,9 +78,15 @@ export default {
         clear () {
             this.rows = []
             this.cans = 0
+            this.startTime = 0
         },
 
         swap () {
+             if (this.startCalcOnClick){
+                this.startCalculation()
+            }
+            this.startTime = performance.now()
+
             var operations = parseInt(this.operations)+1
             var firstValue = 1
             var rowsLength = this.rows.length
@@ -92,6 +104,11 @@ export default {
         },
 
         append () {
+             if (this.startCalcOnClick){
+                this.startCalculation()
+            }
+            this.startTime = performance.now()
+
             var operations = parseInt(this.operations)+1
             var inital = operations-1
             var rowsLength = this.rows.length
@@ -104,6 +121,11 @@ export default {
         },
 
         remove () {
+             if (this.startCalcOnClick){
+                this.startCalculation()
+            }
+            this.startTime = performance.now()
+
             var operations = parseInt(this.operations)
             var initalOperator = operations
             var tempOps = operations
@@ -119,41 +141,61 @@ export default {
         },
 
         insertCanvas () {
-         this.cans = parseInt(this.operations)
+             if (this.startCalcOnClick){
+                this.startCalculation()
+            }
+            this.startTime = performance.now()
+
+            this.cans = parseInt(this.operations)
         },
 
         startCalculation () {
+            console.log("Start Background calculations")
             this.startCalc = setInterval(function(){
-                let num = 50
+                let num = 30
                 var a = 1, b = 0, temp;
                     while (num >= 0){
                         temp = a;
                         a = a + b;
                         b = temp;
-                        console.log(b)
+                        //console.log(b)
                         num--;
                     }
-            },1000)
+            },10)
         },
 
         stopCalculation () {
             clearInterval(this.startCalc);
+            console.log("Stop Background calculations")
         }
 
-    }, components : {
+    }, updated : function(){
+            let endTime = performance.now()
+            let executionTime = endTime - this.startTime
+    
+            if(this.startTime !== 0) {
+                console.log(executionTime)
+            }
+            console.log("Update finished!")
+    },
+    components : {
             Canvas
     }
 }
 </script>
 <style scoped>
     table, th, td {
-    border: 1px solid black;
-    margin-left: 100px;
-    float: left;
-    margin: 0 auto;
-    width: 100px;
-}
-    table {
+        border: 1px solid black;
+
+        float: left;
+        margin: 0 auto;
+        width: 100px;
+    }
+    #ops {
+        float: left;
         margin-left: 10%;
+    }
+    input {
+        margin: 0
     }
 </style>

@@ -17,6 +17,7 @@ class Performancetest extends React.Component {
         if(this.state.startTime !== 0) {
             console.log(executionTime)
         }
+        console.log("Update finished!")
     }
 
 
@@ -130,7 +131,7 @@ class Performancetest extends React.Component {
     startCalculation =  () => {
         console.log("Start Background calculations")
         var tempCals = setInterval(function(){
-            let num = 50
+            let num = 30
             var a = 1, b = 0, temp;
             while (num >= 0){
               temp = a;
@@ -139,7 +140,7 @@ class Performancetest extends React.Component {
               //console.log(b)
               num--;
             }
-        },1000)
+        },10)
         this.setState({startCalc: tempCals})
     }
 
