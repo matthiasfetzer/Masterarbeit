@@ -14,7 +14,7 @@
                     <br><br>
                     <input type="checkbox" v-model="startCalcOnClick" /> Starte Kalkulation mit Button Click
                     <br><br>
-                    <input v-model="operations" type="Number" value="ops" />
+                    <input @change="setOperations($event)" type="Number" value="ops" />
                     {{ operations }}
                     <br><br>
                     <table>
@@ -74,7 +74,12 @@ export default {
                 //this.rows.push(temp++) //-> for debugging only
             }
         },
-
+        
+        setOperations (event){
+            // don't show time on insert
+            this.startTime = 0
+            this.operations = event.target.value
+        },
         clear () {
             this.rows = []
             this.cans = 0

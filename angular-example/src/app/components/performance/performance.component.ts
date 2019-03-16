@@ -3,21 +3,22 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-performance',
   template: `
-        <div id="performanceTest" >      
+        <div id="performanceTest" >
         <p>In Performance</p>
         <div id="ops">
-            
-            <button type="button" (click)="insertNumbers()">Insert</button> 
-            <button type="button" (click)="clear()">Clear</button> 
-            <button type="button" (click)="swap()">Swap</button> 
-            <button type="button" (click)="append()">Append</button> 
-            <button type="button" (click)="remove()">Delete</button> 
-            <button type="button" (click)="insertCanvas()">Insert Canvas</button> 
-            <button type="button" (click)="startCalculation()">Starte Berechnung</button> 
-            <button type="button" (click)="stopCalculation()">Stoppe Berechnung</button> 
-  
+
+            <button type="button" (click)="insertNumbers()">Insert</button>
+            <button type="button" (click)="clear()">Clear</button>
+            <button type="button" (click)="swap()">Swap</button>
+            <button type="button" (click)="append()">Append</button>
+            <button type="button" (click)="remove()">Delete</button>
+            <button type="button" (click)="insertCanvas()">Insert Canvas</button>
+            <button type="button" (click)="startCalculation()">Starte Berechnung</button>
+            <button type="button" (click)="stopCalculation()">Stoppe Berechnung</button>
+            <input type="checkbox" [(ngModel)]="startCalcOnClick" /> Starte Kalkulation mit Button Click
             <br><br>
-            <input [(ngModel)]="operations" type="Number" value="ops" />
+
+            <input (change)="setOperations($event)" type="Number" value="ops" />
             {{ operations }}
             <br><br>
             <div id="tables">
@@ -65,18 +66,38 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PerformanceComponent implements OnInit {
 
-      operations = 0
-      amountOfCanvas = 0
+      operations: number = 0
+      amountOfCanvas: number = 0
       rows = []
       cans = Array;
-      startCalc;
+      startCalc = null;
+      startTime:number = 0
+      startCalcOnClick: boolean = false
 
       constructor() { }
 
       ngOnInit() {
       }
 
+      ngAfterContentChecked() {
+          let endTime = performance.now()
+          let executionTime = endTime - this.startTime
+
+          if(this.startTime !== 0) {
+              console.log(executionTime)
+          }
+          //console.log("Update finished!")
+      }
+
+      setOperations(event){
+        this.startTime = 0
+        this.operations = parseInt(event.target.value)
+      }
       insertNumbers () {
+        if (this.startCalcOnClick){
+          this.startCalculation()
+        }
+        this.startTime = performance.now()
         // var temp = 0 //-> for debugging only
         for (let i=0;i < this.operations;i++){
             this.rows.push(Math.floor(1000 + Math.random() * 9000));
@@ -87,9 +108,14 @@ export class PerformanceComponent implements OnInit {
     clear () {
         this.rows = []
         this.amountOfCanvas = 0
+        this.startTime = 0
     }
 
     swap () {
+        if (this.startCalcOnClick){
+          this.startCalculation()
+        }
+        this.startTime = performance.now()
         var operations = this.operations+1
         var firstValue = 1
         var rowsLength = this.rows.length
@@ -99,14 +125,19 @@ export class PerformanceComponent implements OnInit {
             let  tempFirst = this.rows[firstValue];  // save fist entry to swap
             this.rows.splice(firstValue, 1, this.rows[operations]);
             this.rows.splice(operations, 1, tempFirst);
-            //  console.log("swap index: "+first +"<- " + operations)
-            //  console.log("swap index: "+operations +"<- " + first)
+              // console.log("swap index: "+firstValue +"<- " + operations)
+              // console.log("swap index: "+operations +"<- " + firstValue)
             firstValue=operations+1 // first as next entry
             operations=firstValue-1+inital // second as last first (first -1) + operation value
         }
     }
 
     append () {
+        if (this.startCalcOnClick){
+          this.startCalculation()
+        }
+        this.startTime = performance.now()
+
         var operations = this.operations+1
         var inital = operations-1
         var rowsLength = this.rows.length
@@ -118,6 +149,11 @@ export class PerformanceComponent implements OnInit {
     }
 
     remove () {
+        if (this.startCalcOnClick){
+          this.startCalculation()
+        }
+        this.startTime = performance.now()
+
         var operations = this.operations
         var initalOperator = operations
         var tempOps = operations
@@ -132,21 +168,26 @@ export class PerformanceComponent implements OnInit {
     }
 
     insertCanvas () {
+      if (this.startCalcOnClick){
+        this.startCalculation()
+      }
+      this.startTime = performance.now()
+
       this.amountOfCanvas = this.operations
-    }  
-  
+    }
+
     startCalculation () {
       this.startCalc = setInterval(function(){
-          let num = 50
+          let num = 30
           var a = 1, b = 0, temp;
           while (num >= 0){
             temp = a;
             a = a + b;
             b = temp;
-            console.log(b)
+            //console.log(b)
             num--;
           }
-      },1000)
+      },10)
     }
 
     stopCalculation () {
