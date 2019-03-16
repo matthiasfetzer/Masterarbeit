@@ -79,16 +79,15 @@ export class PerformanceComponent implements OnInit {
       ngOnInit() {
       }
 
-      ngAfterContentChecked() {
-          let endTime = performance.now()
+      ngAfterViewChecked() {
+        let endTime = performance.now()
           let executionTime = endTime - this.startTime
 
           if(this.startTime !== 0) {
               console.log(executionTime)
           }
-          //console.log("Update finished!")
+          console.log("Update finished!")
       }
-
       setOperations(event){
         this.startTime = 0
         this.operations = parseInt(event.target.value)
