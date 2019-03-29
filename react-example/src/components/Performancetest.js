@@ -166,18 +166,18 @@ class Performancetest extends React.Component {
             <div id="container">
                 <h3>Welcome Performancetest</h3>
         
-                <button type="button" onClick = {this.clear}>Clear</button> 
-                <button type="button" onClick={this.insertNumbers}>Insert</button> 
-                <button type="button" onClick={this.swap}>Swap</button> 
-                <button type="button" onClick={this.append}>Append</button> 
-                <button type="button" onClick={this.delete}>Delete</button> 
-                <button type="button" onClick={this.insertCanvas}>Insert Canvas</button> 
-                <button type="button" onClick={this.startCalculation}>Starte Berechnung</button> 
-                <button type="button" onClick={this.stopCalculation}>Stoppe Berechnung</button> <br/> <br/>
-                <input type="checkbox" checked={this.state.startCalcOnClick} onChange={this.startCalcOnClick} /> Starte Kalkulation mit Button Click 
+                <button id="clear" type="button" onClick = {this.clear}>Clear</button> 
+                <button id="insertNumber" type="button" onClick={this.insertNumbers}>Insert</button> 
+                <button id="swap" type="button" onClick={this.swap}>Swap</button> 
+                <button id="append" type="button" onClick={this.append}>Append</button> 
+                <button id="remove" type="button" onClick={this.delete}>Delete</button> 
+                <button id="insertCanvas" type="button" onClick={this.insertCanvas}>Insert Canvas</button> 
+                <button id="startCalc" type="button" onClick={this.startCalculation}>Starte Berechnung</button> 
+                <button id="stopCalc" type="button" onClick={this.stopCalculation}>Stoppe Berechnung</button> <br/> <br/>
+                <input id="checkCalc" type="checkbox" checked={this.state.startCalcOnClick} onChange={this.startCalcOnClick} /> Starte Kalkulation mit Button Click 
                 <br/> <br/>
 
-                <input type="text" name="operations"  onChange={this.setOperations}/>
+                <input id="operations" type="text" name="operations"  onChange={this.setOperations}/>
 
                 <p id="ops">Current Operations: {this.state.operations}</p>
                 <br/> <br/>
@@ -188,7 +188,7 @@ class Performancetest extends React.Component {
                         <th>Values</th>
                      </tr>
                     {this.state.rows.map((r, i) => (
-                      <tr key={i}>
+                      <tr key={i} id={i}>
                           <td key={i}>{r}</td>
                       </tr>
                     ))}

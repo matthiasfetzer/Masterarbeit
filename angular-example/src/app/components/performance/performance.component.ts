@@ -7,18 +7,18 @@ import { Component, OnInit } from '@angular/core';
         <p>In Performance</p>
         <div id="ops">
 
-            <button type="button" (click)="insertNumbers()">Insert</button>
-            <button type="button" (click)="clear()">Clear</button>
-            <button type="button" (click)="swap()">Swap</button>
-            <button type="button" (click)="append()">Append</button>
-            <button type="button" (click)="remove()">Delete</button>
-            <button type="button" (click)="insertCanvas()">Insert Canvas</button>
-            <button type="button" (click)="startCalculation()">Starte Berechnung</button>
-            <button type="button" (click)="stopCalculation()">Stoppe Berechnung</button>
-            <input type="checkbox" [(ngModel)]="startCalcOnClick" /> Starte Kalkulation mit Button Click
+            <button id="insertNumber" type="button" (click)="insertNumbers()">Insert</button>
+            <button id="clear" type="button" (click)="clear()">Clear</button>
+            <button id="swap" type="button" (click)="swap()">Swap</button>
+            <button id="append" type="button" (click)="append()">Append</button>
+            <button id="remove" type="button" (click)="remove()">Delete</button>
+            <button id="insertCanvas" type="button" (click)="insertCanvas()">Insert Canvas</button>
+            <button id="startCalc" type="button" (click)="startCalculation()">Starte Berechnung</button>
+            <button id="stopCalc" type="button" (click)="stopCalculation()">Stoppe Berechnung</button>
+            <input id="checkCalc" type="checkbox" [(ngModel)]="startCalcOnClick" /> Starte Kalkulation mit Button Click
             <br><br>
 
-            <input (change)="setOperations($event)" type="Number" value="ops" />
+            <input id="operations" (change)="setOperations($event)" type="Number" value="ops" />
             {{ operations }}
             <br><br>
             <div id="tables">
@@ -27,9 +27,11 @@ import { Component, OnInit } from '@angular/core';
                         <tr>
                             <th>Values</th>
                         </tr>
-                        <tr *ngFor="let row of rows" >
-                            <td>{{row}}</td>
-                        </tr>
+                        <div *ngFor="let row of rows; let i = index">
+                          <tr id="{{i}}">
+                              <td>{{row}}</td>
+                          </tr>
+                        </div>
                     </tbody>
                 </table>
                 <table id="canvasTable">
@@ -86,7 +88,7 @@ export class PerformanceComponent implements OnInit {
           if(this.startTime !== 0) {
               console.log(executionTime)
           }
-          console.log("Update finished!")
+          this.startTime = 0
       }
       setOperations(event){
         this.startTime = 0

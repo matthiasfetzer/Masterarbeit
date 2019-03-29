@@ -3,18 +3,18 @@
                 <p>In Performance</p>
                 <div id="ops">
                     
-                    <button type="button" v-on:click="insertNumbers">Insert</button> 
-                    <button type="button" v-on:click="clear">Clear</button> 
-                    <button type="button" v-on:click="swap">Swap</button> 
-                    <button type="button" v-on:click="append">Append</button> 
-                    <button type="button" v-on:click="remove">Delete</button> 
-                    <button type="button" v-on:click="insertCanvas">Insert Canvas</button> 
-                    <button type="button" v-on:click="startCalculation">Starte Berechnung</button> 
-                    <button type="button" v-on:click="stopCalculation">Stoppe Berechnung</button> 
+                    <button id="insertNumber" type="button" v-on:click="insertNumbers">Insert</button> 
+                    <button id="clear" type="button" v-on:click="clear">Clear</button> 
+                    <button id="swap" type="button" v-on:click="swap">Swap</button> 
+                    <button id="append" type="button" v-on:click="append">Append</button> 
+                    <button id="remove" type="button" v-on:click="remove">Delete</button> 
+                    <button id="insertCanvas" type="button" v-on:click="insertCanvas">Insert Canvas</button> 
+                    <button id="startCalc" type="button" v-on:click="startCalculation">Starte Berechnung</button> 
+                    <button id="stopCalc" ype="button" v-on:click="stopCalculation">Stoppe Berechnung</button> 
                     <br><br>
-                    <input type="checkbox" v-model="startCalcOnClick" /> Starte Kalkulation mit Button Click
+                    <input id="checkCalc" type="checkbox" v-model="startCalcOnClick" /> Starte Kalkulation mit Button Click
                     <br><br>
-                    <input @change="setOperations($event)" type="Number" value="ops" />
+                    <input id="operations" @change="setOperations($event)" type="Number" value="ops" />
                     {{ operations }}
                     <br><br>
                     <table>
@@ -22,7 +22,7 @@
                             <tr>
                                 <th>Values</th>
                             </tr>
-                            <tr v-for="(row, i) in rows" :key="i" >
+                            <tr v-for="(row, i) in rows" :key="i" v-bind:id="i">
                                 <td key={i}>{{row}}</td>
                             </tr>
                         </tbody>
